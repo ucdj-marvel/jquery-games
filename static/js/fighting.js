@@ -1,19 +1,43 @@
 $(document).ready(function() {
   const canvas = $('canvas')[0],
-        background = 'black',
         c = canvas.getContext('2d'),
         gravity = 0.7;
 
   canvas.width = 1024;
   canvas.height = 576;
 
+  let Background = function({ position, imageSrc, scale=1 }) {
+    this.position = position;
+    this.image = new Image();
+    this.image.src = imageSrc;
+    this.scale = scale;
+
+    this.drawing = function() {
+      c.drawImage(
+        this.image,
+        0,
+        0,
+        this.image.width,
+        this.image.height,
+        this.position.x,
+        this.position.y,
+        this.image.width * this.scale,
+        this.image.height * this.scale
+      );
+    };
+
+    this.update = function() {
+      this.drawing();
+    };
+  };
+
   let Humanoid = function({ position, velocity, color, attackRangeStartPosition }) {
-    this.position = position
-    this.velocity = velocity
-    this.color = color
-    this.width = 50
-    this.height = 150
-    this.inputKey
+    this.position = position;
+    this.velocity = velocity;
+    this.color = color;
+    this.width = 50;
+    this.height = 150;
+    this.inputKey;
     this.attackBox = {
       position: {
         x: this.position.x,
@@ -22,38 +46,38 @@ $(document).ready(function() {
       attackRangeStartPosition,
       width: 100,
       height: 50
-    }
-    this.color = color
-    this.isAttacking
-    this.health = 100
+    };
+    this.color = color;
+    this.isAttacking;
+    this.health = 100;
 
-    this.draw = function() {
-      c.fillStyle = this.color
-      c.fillRect(this.position.x, this.position.y, this.width, this.height)
+    this.drawing = function() {
+      c.fillStyle = this.color;
+      c.fillRect(this.position.x, this.position.y, this.width, this.height);
 
       if (this.isAttacking) {
-        c.fillStyle = 'green'
+        c.fillStyle = 'green';
         c.fillRect(
           this.attackBox.position.x,
           this.attackBox.position.y,
           this.attackBox.width,
           this.attackBox.height
-        )
+        );
       }
     };
 
     this.update = function() {
-      this.draw();
-      this.attackBox.position.x = this.position.x + this.attackBox.attackRangeStartPosition.x
-      this.attackBox.position.y = this.position.y
+      this.drawing();
+      this.attackBox.position.x = this.position.x + this.attackBox.attackRangeStartPosition.x;
+      this.attackBox.position.y = this.position.y;
 
-      this.position.x += this.velocity.x
-      this.position.y += this.velocity.y
+      this.position.x += this.velocity.x;
+      this.position.y += this.velocity.y;
 
       if (this.position.y + this.height + this.velocity.y >= canvas.height) {
-        this.velocity.y = 0
+        this.velocity.y = 0;
       } else {
-        this.velocity.y += gravity
+        this.velocity.y += gravity;
       }
     };
 
@@ -61,11 +85,19 @@ $(document).ready(function() {
       this.isAttacking = true;
       setTimeout(() => {
         this.isAttacking = false;
-      }, 100)
-    }
+      }, 100);
+    };
   };
 
-  const player1 = new Humanoid({
+  const background = new Background({
+          position: {
+            x: 0,
+            y: 0
+          },
+          imageSrc: 'static/image/craftpix/backgrounds/PNG/City1/Bright/City1.png',
+          scale: 0.7,
+        }),
+        player1 = new Humanoid({
           position: {
             x: 300,
             y: 0
@@ -120,7 +152,7 @@ $(document).ready(function() {
         targetPlayer.position.y &&
       attackPlayer.attackBox.position.y <= targetPlayer.position.y + targetPlayer.height
     )
-  }
+  };
 
   function gameset({ player1, player2, timerId }) {
     clearTimeout(timerId);
@@ -131,28 +163,28 @@ $(document).ready(function() {
       $('#displayText').text('Player 1 Wins');
     } else if (player1.health < player2.health) {
       $('#displayText').text('Player 2 Wins');
-    }
-  }
+    };
+  };
 
-  let timer = 60
-  let timerId
+  let timer = 60;
+  let timerId;
   function decreaseTimer() {
     if (timer > 0) {
       timerId = setTimeout(decreaseTimer, 1000);
       timer--;
       $('#timer').text(timer);
-    }
+    };
     if (timer === 0) {
       gameset({ player, player2, timerId });
-    }
-  }
+    };
+  };
 
   decreaseTimer();
 
   function animate() {
     game = window.requestAnimationFrame(animate);
-    c.fillStyle = background;
     c.fillRect(0, 0, canvas.width, canvas.height);
+    background.update();
     player1.update();
     player2.update();
 
@@ -163,13 +195,13 @@ $(document).ready(function() {
       player1.velocity.x = -5;
     } else if (keys.d.pressed && player1.inputKey === 'd') {
       player1.velocity.x = 5;
-    }
+    };
 
     if (keys.ArrowLeft.pressed && player2.inputKey === 'ArrowLeft') {
       player2.velocity.x = -5;
     } else if (keys.ArrowRight.pressed && player2.inputKey === 'ArrowRight') {
       player2.velocity.x = 5;
-    }
+    };
 
     if (
       attackSuccessJudgment({
@@ -180,7 +212,7 @@ $(document).ready(function() {
       player1.isAttacking = false;
       player2.health -= 20;
       $('#player2Health').css('width', player2.health + '%');
-    }
+    };
 
     if (
       attackSuccessJudgment({
@@ -191,13 +223,13 @@ $(document).ready(function() {
       player2.isAttacking = false;
       player1.health -= 20;
       $('#player1Health').css('width', player1.health + '%');
-    }
+    };
 
     if (player1.health <= 0 || player2.health <= 0) {
       gameset({ player1, player2, timerId });
       cancelAnimationFrame(game);
-    }
-  }
+    };
+  };
 
   animate();
 
@@ -231,7 +263,7 @@ $(document).ready(function() {
       case 'ArrowDown':
         player2.attack();
         break
-    }
+    };
   });
 
   $(document).keyup(function(event) {
@@ -250,6 +282,6 @@ $(document).ready(function() {
       case 'ArrowLeft':
         keys.ArrowLeft.pressed = false;
         break
-    }
+    };
   });
 });
