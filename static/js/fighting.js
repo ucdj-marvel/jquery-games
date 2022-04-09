@@ -65,8 +65,6 @@ $(document).ready(function() {
     }
   };
 
-
-
   const player1 = new Humanoid({
           position: {
             x: 300,
@@ -124,8 +122,35 @@ $(document).ready(function() {
     )
   }
 
+  function gameset({ player1, player2, timerId }) {
+    clearTimeout(timerId);
+    $('#displayText').css('display', 'flex');
+    if (player1.health === player2.health) {
+      $('#displayText').text('Draw');
+    } else if (player1.health > player2.health) {
+      $('#displayText').text('Player 1 Wins');
+    } else if (player1.health < player2.health) {
+      $('#displayText').text('Player 2 Wins');
+    }
+  }
+
+  let timer = 60
+  let timerId
+  function decreaseTimer() {
+    if (timer > 0) {
+      timerId = setTimeout(decreaseTimer, 1000);
+      timer--;
+      $('#timer').text(timer);
+    }
+    if (timer === 0) {
+      gameset({ player, player2, timerId });
+    }
+  }
+
+  decreaseTimer();
+
   function animate() {
-    window.requestAnimationFrame(animate);
+    game = window.requestAnimationFrame(animate);
     c.fillStyle = background;
     c.fillRect(0, 0, canvas.width, canvas.height);
     player1.update();
@@ -153,7 +178,7 @@ $(document).ready(function() {
       }) && player1.isAttacking
     ) {
       player1.isAttacking = false;
-      player2.health -= 20
+      player2.health -= 20;
       $('#player2Health').css('width', player2.health + '%');
     }
 
@@ -164,9 +189,13 @@ $(document).ready(function() {
       }) && player2.isAttacking
     ) {
       player2.isAttacking = false;
-      player1.health -= 20
+      player1.health -= 20;
       $('#player1Health').css('width', player1.health + '%');
+    }
 
+    if (player1.health <= 0 || player2.health <= 0) {
+      gameset({ player1, player2, timerId });
+      cancelAnimationFrame(game);
     }
   }
 
@@ -204,6 +233,7 @@ $(document).ready(function() {
         break
     }
   });
+
   $(document).keyup(function(event) {
     switch (event.key) {
       case 'd':

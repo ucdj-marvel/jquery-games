@@ -1,3 +1,7 @@
+* {
+  box-sizing: border-box;
+}
+
 #redContainer {
   position: relative;
   display: inline-block;
@@ -8,6 +12,7 @@
   display: flex;
   width: 100%;
   align-items: center;
+  padding: 20px;
 }
 
 #timer {
@@ -15,6 +20,9 @@
   width: 100px;
   height: 100px;
   flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 #player1HealthContainer, #player2HealthContainer {
@@ -38,4 +46,16 @@
   right: 0;
   bottom: 0;
   width: 100%;
+}
+
+#displayText {
+  position: absolute;
+  color: white;
+  align-items: center;
+  justify-content: center;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  display: none;
 }
