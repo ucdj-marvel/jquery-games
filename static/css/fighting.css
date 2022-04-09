@@ -1,0 +1,41 @@
+#redContainer {
+  position: relative;
+  display: inline-block;
+}
+
+#smallRedContainer {
+  position: absolute;
+  display: flex;
+  width: 100%;
+  align-items: center;
+}
+
+#timer {
+  background-color: white;
+  width: 100px;
+  height: 100px;
+  flex-shrink: 0;
+}
+
+#player1HealthContainer, #player2HealthContainer {
+  position: relative;
+  height: 30px;
+  width: 100%;
+  display: flex;
+  justify-content: flex-end;
+}
+
+#player1HealthBase, #player2HealthBase {
+  background-color: red;
+  height: 30px;
+  width: 100%;
+}
+
+#player1Health, #player2Health {
+  position: absolute;
+  background: yellow;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  width: 100%;
+}
