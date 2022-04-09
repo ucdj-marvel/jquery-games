@@ -3,7 +3,7 @@ class Drawing {
     position,
     imageSrc,
     scale = 1,
-    offset = { x: 0, y: 0 }
+    offset = { x: 0, y: 0 },
   }) {
     this.position = position
     this.width = 50
@@ -41,6 +41,7 @@ class Humanoid extends Drawing {
     imageSrc,
     scale = 1,
     offset = { x: 0, y: 0 },
+    sprites
   }) {
     super({
       position,
@@ -63,6 +64,12 @@ class Humanoid extends Drawing {
     }
     this.isAttacking
     this.health = 100
+    this.sprites = sprites
+
+    for (const sprite in this.sprites) {
+      sprites[sprite].image = new Image()
+      sprites[sprite].image.src = sprites[sprite].imageSrc
+    }
   }
 
   update() {

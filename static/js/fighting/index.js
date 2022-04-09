@@ -32,6 +32,14 @@ const background = new Drawing({
           y: 0
         },
         scale: 0.2,
+        sprites: {
+          idle: {
+            imageSrc: 'static/image/craftpix/characters/police/png/1/idle/1_police_Idle_000.png',
+          },
+          run: {
+            imageSrc: 'static/image/craftpix/characters/police/png/1/run/1_police_Run_000.png',
+          }
+        }
       }),
       player2 = new Humanoid({
         position: {
@@ -75,16 +83,22 @@ function animate() {
   player1.velocity.x = 0;
   player2.velocity.x = 0;
 
+  player1.image = player1.sprites.idle.image
+  // player2.image = player2.sprites.idle.image
   if (keys.a.pressed && player1.inputKey === 'a') {
     player1.velocity.x = -5;
+    player1.image = player1.sprites.run.image
   } else if (keys.d.pressed && player1.inputKey === 'd') {
     player1.velocity.x = 5;
+    player1.image = player1.sprites.run.image
   };
 
   if (keys.ArrowLeft.pressed && player2.inputKey === 'ArrowLeft') {
     player2.velocity.x = -5;
+    player2.image = player2.sprites.run.image
   } else if (keys.ArrowRight.pressed && player2.inputKey === 'ArrowRight') {
     player2.velocity.x = 5;
+    player2.image = player2.sprites.run.image
   };
 
   if (
