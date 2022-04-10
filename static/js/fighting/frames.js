@@ -18,4 +18,14 @@ const lastPoliceBackGroundCity1 = [
         'static/image/craftpix/characters/police/png/1/run/1_police_Run_003.png',
         'static/image/craftpix/characters/police/png/1/run/1_police_Run_004.png',
         'static/image/craftpix/characters/police/png/1/run/1_police_Run_005.png',
+      ],
+      lastPoliceCharacter1Jumps = [
+        'static/image/craftpix/characters/police/png/1/jump/1_police_Jump_000.png',
+        'static/image/craftpix/characters/police/png/1/jump/1_police_Jump_001.png',
+        'static/image/craftpix/characters/police/png/1/jump/1_police_Jump_002.png',
+        'static/image/craftpix/characters/police/png/1/jump/1_police_Jump_003.png',
+        'static/image/craftpix/characters/police/png/1/jump/1_police_Jump_004.png',
+        'static/image/craftpix/characters/police/png/1/jump/1_police_Jump_005.png',
+        'static/image/craftpix/characters/police/png/1/jump/1_police_Jump_006.png',
+        'static/image/craftpix/characters/police/png/1/jump/1_police_Jump_007.png',
       ];

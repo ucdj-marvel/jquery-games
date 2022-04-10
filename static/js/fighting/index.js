@@ -5,6 +5,8 @@ const canvas = document.querySelector('canvas'),
 canvas.width = 1024
 canvas.height = 576
 
+const rect = canvas.getBoundingClientRect();
+
 const background = new Drawing({
         position: {
           x: 0,
@@ -42,7 +44,11 @@ const background = new Drawing({
           run: {
             imageSrcArray: lastPoliceCharacter1Runs,
             framesMax: lastPoliceCharacter1Runs.length,
-          }
+          },
+          jump: {
+            imageSrcArray: lastPoliceCharacter1Jumps,
+            framesMax: lastPoliceCharacter1Jumps.length,
+          },
         }
       }),
       player2 = new Humanoid({
@@ -103,11 +109,20 @@ function animate() {
   player1.velocity.x = 0;
   player2.velocity.x = 0;
 
-  player1.idle();
+  if (player1.velocity.y < 0) {
+    console.log(player1.velocity.y)
+    player1.switchDrawing('jump');
+  } else {
+    player1.jumped = false;
+  }
   if (keys.a.pressed && player1.inputKey === 'a') {
-    player1.run();
+    player1.velocity.x = -5;
+    if (!player1.jumped) player1.switchDrawing('run');
   } else if (keys.d.pressed && player1.inputKey === 'd') {
-    player1.run();
+    player1.velocity.x = 5;
+    if (!player1.jumped) player1.switchDrawing('run');
+  } else {
+    player1.switchDrawing('idle');
   }
 
   if (keys.ArrowLeft.pressed && player2.inputKey === 'ArrowLeft') {
@@ -159,6 +174,7 @@ window.addEventListener('keydown', (event) => {
       player1.inputKey = 'a';
       break
     case 'w':
+      player1.jumped = true;
       player1.velocity.y = -15;
       break
     case ' ':
