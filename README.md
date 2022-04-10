@@ -1,2 +1,2 @@
-# jquery-games
-jquery games
+# js-games
+js games
