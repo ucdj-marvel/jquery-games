@@ -28,4 +28,16 @@ const lastPoliceBackGroundCity1 = [
         'static/image/craftpix/characters/police/png/1/jump/1_police_Jump_005.png',
         'static/image/craftpix/characters/police/png/1/jump/1_police_Jump_006.png',
         'static/image/craftpix/characters/police/png/1/jump/1_police_Jump_007.png',
+      ],
+      lastPoliceCharacter1Attack1 = [
+        'static/image/craftpix/characters/police/png/1/attack1/1_police_attack_Attack1_000.png',
+        'static/image/craftpix/characters/police/png/1/attack1/1_police_attack_Attack1_001.png',
+        'static/image/craftpix/characters/police/png/1/attack1/1_police_attack_Attack1_002.png',
+        'static/image/craftpix/characters/police/png/1/attack1/1_police_attack_Attack1_003.png',
+        'static/image/craftpix/characters/police/png/1/attack1/1_police_attack_Attack1_004.png',
+        'static/image/craftpix/characters/police/png/1/attack1/1_police_attack_Attack1_005.png',
+        'static/image/craftpix/characters/police/png/1/attack1/1_police_attack_Attack1_006.png',
+        'static/image/craftpix/characters/police/png/1/attack1/1_police_attack_Attack1_007.png',
+        'static/image/craftpix/characters/police/png/1/attack1/1_police_attack_Attack1_008.png',
+        'static/image/craftpix/characters/police/png/1/attack1/1_police_attack_Attack1_009.png',
       ];

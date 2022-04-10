@@ -118,12 +118,17 @@ class Humanoid extends Drawing {
     }
     this.sprites[motion].image.src = this.sprites[motion].imageSrcArray[this.framesCurrent]
     this.image = this.sprites[motion].image
+    if (motion === 'attack1') {
+      this.framesHold = 2
+    } else {
+      this.framesHold = 10
+    }
   }
 
   attack() {
     this.isAttacking = true
     setTimeout(() => {
       this.isAttacking = false
-    }, 100)
+    }, 300)
   }
 }

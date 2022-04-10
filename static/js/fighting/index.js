@@ -49,6 +49,10 @@ const background = new Drawing({
             imageSrcArray: lastPoliceCharacter1Jumps,
             framesMax: lastPoliceCharacter1Jumps.length,
           },
+          attack1: {
+            imageSrcArray: lastPoliceCharacter1Attack1,
+            framesMax: lastPoliceCharacter1Attack1.length,
+          }
         }
       }),
       player2 = new Humanoid({
@@ -109,19 +113,20 @@ function animate() {
   player1.velocity.x = 0;
   player2.velocity.x = 0;
 
-  if (player1.velocity.y < 0) {
-    console.log(player1.velocity.y)
+  if (player1.isAttacking) {
+    player1.switchDrawing('attack1');
+  } else if (player1.velocity.y < 0) {
     player1.switchDrawing('jump');
   } else {
     player1.jumped = false;
   }
   if (keys.a.pressed && player1.inputKey === 'a') {
     player1.velocity.x = -5;
-    if (!player1.jumped) player1.switchDrawing('run');
+    if (!player1.jumped && !player1.isAttacking) player1.switchDrawing('run');
   } else if (keys.d.pressed && player1.inputKey === 'd') {
     player1.velocity.x = 5;
-    if (!player1.jumped) player1.switchDrawing('run');
-  } else {
+    if (!player1.jumped && !player1.isAttacking) player1.switchDrawing('run');
+  } else if (!player1.jumped && !player1.isAttacking) {
     player1.switchDrawing('idle');
   }
 
