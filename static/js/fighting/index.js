@@ -10,7 +10,8 @@ const background = new Drawing({
           x: 0,
           y: 0
         },
-        imageSrc: 'static/image/craftpix/backgrounds/PNG/City1/Bright/City1.png',
+        imageSrcArray: lastPoliceBackGroundCity1,
+        framesMax: lastPoliceBackGroundCity1.length,
         scale: 0.7,
       }),
       player1 = new Humanoid({
@@ -26,7 +27,8 @@ const background = new Drawing({
           x: 0,
           y: 0
         },
-        imageSrc: 'static/image/craftpix/characters/police/png/1/idle/1_police_Idle_000.png',
+        imageSrcArray: lastPoliceCharacter1Idles,
+        framesMax: lastPoliceCharacter1Idles.length,
         offset: {
           x: 100,
           y: 0
@@ -34,10 +36,12 @@ const background = new Drawing({
         scale: 0.2,
         sprites: {
           idle: {
-            imageSrc: 'static/image/craftpix/characters/police/png/1/idle/1_police_Idle_000.png',
+            imageSrcArray: lastPoliceCharacter1Idles,
+            framesMax: lastPoliceCharacter1Idles.length,
           },
           run: {
-            imageSrc: 'static/image/craftpix/characters/police/png/1/run/1_police_Run_000.png',
+            imageSrcArray: lastPoliceCharacter1Runs,
+            framesMax: lastPoliceCharacter1Runs.length,
           }
         }
       }),
@@ -50,10 +54,26 @@ const background = new Drawing({
           x: 0,
           y: 0
         },
-        color: 'red',
         attackRangeStartPosition: {
           x: -50,
           y: 0
+        },
+        imageSrcArray: lastPoliceCharacter1Idles,
+        framesMax: lastPoliceCharacter1Idles.length,
+        offset: {
+          x: 100,
+          y: 0
+        },
+        scale: 0.2,
+        sprites: {
+          idle: {
+            imageSrcArray: lastPoliceCharacter1Idles,
+            framesMax: lastPoliceCharacter1Idles.length,
+          },
+          run: {
+            imageSrcArray: lastPoliceCharacter1Runs,
+            framesMax: lastPoliceCharacter1Runs.length,
+          }
         }
       }),
       keys = {
@@ -83,15 +103,12 @@ function animate() {
   player1.velocity.x = 0;
   player2.velocity.x = 0;
 
-  player1.image = player1.sprites.idle.image
-  // player2.image = player2.sprites.idle.image
+  player1.idle();
   if (keys.a.pressed && player1.inputKey === 'a') {
-    player1.velocity.x = -5;
-    player1.image = player1.sprites.run.image
+    player1.run();
   } else if (keys.d.pressed && player1.inputKey === 'd') {
-    player1.velocity.x = 5;
-    player1.image = player1.sprites.run.image
-  };
+    player1.run();
+  }
 
   if (keys.ArrowLeft.pressed && player2.inputKey === 'ArrowLeft') {
     player2.velocity.x = -5;
