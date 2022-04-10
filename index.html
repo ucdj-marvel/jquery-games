@@ -1,8 +1,18 @@
 <head>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+  <link rel="stylesheet" type="text/css" href="static/css/index.css">
 </head>
 <body>
-  <h1>TOP PAGE</h1>
-  <buton>
-    <a href="./fighting.html">格闘ゲーム</a>
-  </buton>
+  <body style=margin:0 onload="for (s = window.screen, w = q.width = s.width, h = q.height = s.height, m = Math.random, p = [], i = 0; i < 256; p[i++] = 1); setInterval('9Style=\'rgba(0,0,0,.05)\'9Rect(0,0,w,h)9Style=\'#0F0\';p.map(function(v,i){9Text(String.fromCharCode(3e4+m()*33),i*10,v);p[i]=v>758+m()*1e4?0:v+10})'.split(9).join(';q.getContext(\'2d\').fill'), 66)">
+    <!-- matrix code background area -->
+    <div id="wrapper">
+      <canvas id="q"></canvas>
+    </div>
+    <!-- contents area -->
+    <div id="container" class="container fw-bold">
+      <h1 id="title" class="my-5 d-flex align-items-center justify-content-center">JS GAMES</h1>
+      <buton class="d-flex align-items-center justify-content-center">
+        <a href="./fighting.html" class="fs-3 text-decoration-none">FIGHTING</a>
+      </buton>
+    </div>
 </body>
