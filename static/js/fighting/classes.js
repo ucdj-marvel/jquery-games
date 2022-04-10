@@ -111,7 +111,7 @@ class Humanoid extends Drawing {
   idle() {
     this.sprites.idle.image = new Image()
     this.framesMax = this.sprites.idle.framesMax
-    if (this.framesCurrent > this.framesMax) {
+    if (this.framesCurrent > this.framesMax -1) {
       this.framesCurrent = 0
     }
     this.sprites.idle.image.src = this.sprites.idle.imageSrcArray[this.framesCurrent]
@@ -126,7 +126,7 @@ class Humanoid extends Drawing {
     }
     this.sprites.run.image = new Image()
     this.framesMax = this.sprites.run.framesMax
-    if (this.framesCurrent > this.framesMax) {
+    if (this.framesCurrent > this.framesMax -1) {
       this.framesCurrent = 0
     }
     this.sprites.run.image.src = this.sprites.run.imageSrcArray[this.framesCurrent]
