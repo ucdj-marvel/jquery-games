@@ -1,11 +1,13 @@
 class Drawing {
   constructor({
+    background = false,
     position,
     scale = 1,
     framesMax = 1,
     imageSrcArray,
     offset = { x: 0, y: 0 },
   }) {
+    this.background = background
     this.position = position
     this.width = 50
     this.height = 150
@@ -20,20 +22,24 @@ class Drawing {
     this.offset = offset
   }
 
+  // 画像の描画
   draw() {
+    let drawingPosition = 0;
+    if (!this.background) drawingPosition = this.image.width * this.scale
     c.drawImage(
       this.image,
-      0,
-      0,
-      this.image.width,
-      this.image.height,
-      this.position.x - this.offset.x,
-      this.position.y - this.offset.y,
-      this.image.width * this.scale,
-      this.image.height * this.scale
+      0,  // 元イメージ使用範囲の矩形のx座標（初期値は0）
+      0,  // 元イメージ使用範囲の矩形のy座標（初期値は0）
+      this.image.width,  // 元イメージ使用範囲の矩形の幅（初期値はイメージ本来の幅）
+      this.image.height,  // 元イメージ使用範囲の矩形の高さ（初期値はイメージ本来の高さ）
+      this.position.x - drawingPosition,  // 描画イメージ矩形のx座標
+      this.position.y - this.offset.y,  // 描画イメージ矩形のy座標
+      this.image.width * this.scale,  // イメージを描画する幅（初期値はイメージ本来の幅）
+      this.image.height * this.scale  // イメージを描画する高さ（初期値はイメージ本来の高さ）
     )
   }
 
+  // 複数画像をコマ送り
   animateFrames() {
     this.framesElapsed++
 
@@ -56,12 +62,16 @@ class Humanoid extends Drawing {
   constructor({
     position,
     velocity,
-    attackRangeStartPosition,
     imageSrcArray,
     scale = 1,
     framesMax = 1,
     offset = { x: 0, y: 0 },
-    sprites
+    sprites,
+    attackBox = {
+      offset: {},
+      width: 0,
+      height: 0,
+    }
   }) {
     super({
       position,
@@ -80,9 +90,9 @@ class Humanoid extends Drawing {
         x: this.position.x,
         y: this.position.y
       },
-      attackRangeStartPosition,
-      width: 100,
-      height: 50,
+      offset: attackBox.offset,
+      width: attackBox.width,
+      height: attackBox.height,
     }
     this.isAttacking
     this.health = 100
@@ -96,15 +106,16 @@ class Humanoid extends Drawing {
     this.draw()
     this.animateFrames()
 
-    this.attackBox.position.x = this.position.x + this.attackBox.attackRangeStartPosition.x
-    this.attackBox.position.y = this.position.y
+    this.attackBox.position.x = this.position.x + this.attackBox.offset.x
+    this.attackBox.position.y = this.position.y + this.attackBox.offset.y
+
+    c.fillRect(this.attackBox.position.x, this.attackBox.position.y, this.attackBox.width, this.attackBox.height)
 
     this.position.x += this.velocity.x
     this.position.y += this.velocity.y
 
     if (this.position.y + this.height + this.velocity.y >= canvas.height - 96) {
       this.velocity.y = 0
-      this.position.y = 330
     } else {
       this.velocity.y += gravity
     }
@@ -123,12 +134,5 @@ class Humanoid extends Drawing {
     } else {
       this.framesHold = 10
     }
-  }
-
-  attack() {
-    this.isAttacking = true
-    setTimeout(() => {
-      this.isAttacking = false
-    }, 300)
   }
 }
