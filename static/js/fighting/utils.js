@@ -1,12 +1,13 @@
 function attackSuccessJudgment({ attackPlayer, targetPlayer }) {
+  const direction = attackPlayer.direction;
   return (
-    attackPlayer.attackBox.position.x + attackPlayer.attackBox.width >=
+    attackPlayer.attackBox[direction].position.x + attackPlayer.attackBox[direction].width >=
       targetPlayer.position.x &&
-    attackPlayer.attackBox.position.x <=
+    attackPlayer.attackBox[direction].position.x <=
       targetPlayer.position.x + targetPlayer.width &&
-    attackPlayer.attackBox.position.y + attackPlayer.attackBox.height >=
+    attackPlayer.attackBox[direction].position.y + attackPlayer.attackBox[direction].height >=
       targetPlayer.position.y &&
-    attackPlayer.attackBox.position.y <= targetPlayer.position.y + targetPlayer.height
+    attackPlayer.attackBox[direction].position.y <= targetPlayer.position.y + targetPlayer.height
   )
 }
 

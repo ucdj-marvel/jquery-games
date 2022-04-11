@@ -15,9 +15,9 @@ const background = new Drawing({
         imageSrcArray: backGroundCity1,
         framesMax: backGroundCity1.length,
         scale: 0.7,
-        background: true,
       }),
       player1 = new Humanoid({
+        direction: 'right',
         position: {
           x: 300,
           y: 0
@@ -26,41 +26,74 @@ const background = new Drawing({
           x: 0,
           y: 0
         },
-        imageSrcArray: policeCharacter1Idles,
-        framesMax: policeCharacter1Idles.length,
+        imageSrcArray: police1RightIdles,
+        framesMax: police1RightIdles.length,
         offset: {
           x: 100,
           y: 0
         },
         scale: 0.2,
         sprites: {
-          idle: {
-            imageSrcArray: policeCharacter1Idles,
-            framesMax: policeCharacter1Idles.length,
+          right: {
+            idle: {
+              imageSrcArray: police1RightIdles,
+              framesMax: police1RightIdles.length,
+            },
+            run: {
+              imageSrcArray: police1RightRuns,
+              framesMax: police1RightRuns.length,
+            },
+            jump: {
+              imageSrcArray: police1RightJumps,
+              framesMax: police1RightJumps.length,
+            },
+            attack1: {
+              imageSrcArray: police1RightAttack1,
+              framesMax: police1RightAttack1.length,
+              framesHold: 2,
+            }
           },
-          run: {
-            imageSrcArray: policeCharacter1Runs,
-            framesMax: policeCharacter1Runs.length,
+          left: {
+            idle: {
+              imageSrcArray: police1LeftIdles,
+              framesMax: police1LeftIdles.length,
+            },
+            run: {
+              imageSrcArray: police1LeftRuns,
+              framesMax: police1LeftRuns.length,
+            },
+            jump: {
+              imageSrcArray: police1LeftJumps,
+              framesMax: police1LeftJumps.length,
+            },
+            attack1: {
+              imageSrcArray: police1LeftAttack1,
+              framesMax: police1LeftAttack1.length,
+              framesHold: 2,
+            }
           },
-          jump: {
-            imageSrcArray: policeCharacter1Jumps,
-            framesMax: policeCharacter1Jumps.length,
-          },
-          attack1: {
-            imageSrcArray: policeCharacter1Attack1,
-            framesMax: policeCharacter1Attack1.length,
-          }
         },
         attackBox: {
-          offset: {
-            x: -20,
-            y: 50,
+          right: {
+            offset: {
+              x: 0,
+              y: 80,
+            },
+            width: 110,
+            height: 80,
           },
-          width: 115,
-          height: 100,
+          left: {
+            offset: {
+              x: -95,
+              y: 80,
+            },
+            width: 110,
+            height: 80,
+          },
         }
       }),
       player2 = new Humanoid({
+        direction: 'left',
         position: {
           x: 800,
           y: 0
@@ -69,38 +102,68 @@ const background = new Drawing({
           x: 0,
           y: 0
         },
-        imageSrcArray: alienCharacter1Idles,
-        framesMax: alienCharacter1Idles.length,
+        imageSrcArray: alien1LeftIdles,
+        framesMax: alien1LeftIdles.length,
         offset: {
           x: 0,
           y: 0
         },
         scale: 0.6,
         sprites: {
-          idle: {
-            imageSrcArray: alienCharacter1Idles,
-            framesMax: alienCharacter1Idles.length,
+          right: {
+            idle: {
+              imageSrcArray: alien1RightIdles,
+              framesMax: alien1RightIdles.length,
+            },
+            run: {
+              imageSrcArray: alien1RightRuns,
+              framesMax: alien1LeftRuns.length,
+            },
+            jump: {
+              imageSrcArray: alien1RightJumps,
+              framesMax: alien1RightJumps.length,
+            },
+            attack1: {
+              imageSrcArray: alien1RightAttack1,
+              framesMax: alien1RightAttack1.length,
+            }
           },
-          run: {
-            imageSrcArray: alienCharacter1Runs,
-            framesMax: alienCharacter1Runs.length,
-          },
-          jump: {
-            imageSrcArray: alienCharacter1Jumps,
-            framesMax: alienCharacter1Jumps.length,
-          },
-          attack1: {
-            imageSrcArray: alienCharacter1Attack1,
-            framesMax: alienCharacter1Attack1.length,
+          left: {
+            idle: {
+              imageSrcArray: alien1LeftIdles,
+              framesMax: alien1LeftIdles.length,
+            },
+            run: {
+              imageSrcArray: alien1LeftRuns,
+              framesMax: alien1LeftRuns.length,
+            },
+            jump: {
+              imageSrcArray: alien1LeftJumps,
+              framesMax: alien1LeftJumps.length,
+            },
+            attack1: {
+              imageSrcArray: alien1LeftAttack1,
+              framesMax: alien1LeftAttack1.length,
+            }
           }
         },
         attackBox: {
-          offset: {
-            x: -300,
-            y: 100,
+          right: {
+            offset: {
+              x: 20,
+              y: 100,
+            },
+            width: 160,
+            height: 40,
           },
-          width: 195,
-          height: 40,
+          left: {
+            offset: {
+              x: -200,
+              y: 100,
+            },
+            width: 160,
+            height: 40,
+          },
         }
       }),
       keys = {
@@ -117,8 +180,6 @@ const background = new Drawing({
           pressed: false
         }
       };
-
-decreaseTimer();
 
 function animate() {
   game = window.requestAnimationFrame(animate);
@@ -139,9 +200,11 @@ function animate() {
   }
   if (keys.a.pressed && player1.inputKey === 'a') {
     player1.velocity.x = -5;
+    player1.direction = 'left';
     if (!player1.jumped && !player1.isAttacking) player1.switchDrawing('run');
   } else if (keys.d.pressed && player1.inputKey === 'd') {
     player1.velocity.x = 5;
+    player1.direction = 'right';
     if (!player1.jumped && !player1.isAttacking) player1.switchDrawing('run');
   } else if (!player1.jumped && !player1.isAttacking) {
     player1.switchDrawing('idle');
@@ -156,9 +219,11 @@ function animate() {
   }
   if (keys.ArrowLeft.pressed && player2.inputKey === 'ArrowLeft') {
     player2.velocity.x = -5;
+    player2.direction = 'left';
     if (!player2.jumped && !player2.isAttacking) player2.switchDrawing('run');
   } else if (keys.ArrowRight.pressed && player2.inputKey === 'ArrowRight') {
     player2.velocity.x = 5;
+    player2.direction = 'right';
     if (!player2.jumped && !player2.isAttacking) player2.switchDrawing('run');
   } else if (!player2.jumped && !player2.isAttacking) {
     player2.switchDrawing('idle');
@@ -169,7 +234,7 @@ function animate() {
       attackPlayer: player1,
       targetPlayer: player2
     }) &&
-    player1.isAttacking && player1.framesCurrent === (policeCharacter1Attack1.length - 1)
+    player1.isAttacking && player1.framesCurrent === (police1RightAttack1.length - 1)
   ) {
     player1.isAttacking = false;
     player2.health -= 2;
@@ -180,18 +245,19 @@ function animate() {
     attackSuccessJudgment({
       attackPlayer: player2,
       targetPlayer: player1
-    }) && player2.isAttacking
+    }) &&
+    player2.isAttacking && player2.framesCurrent === (alien1LeftAttack1.length - 1)
   ) {
     player2.isAttacking = false;
     player1.health -= 50;
     document.querySelector('#player1Health').style.width = player1.health + '%';
   };
 
-  if (player1.isAttacking && player1.framesCurrent === (policeCharacter1Attack1.length - 1)) {
+  if (player1.isAttacking && player1.framesCurrent === (police1RightAttack1.length - 1)) {
     player1.isAttacking = false;
   }
 
-  if (player2.isAttacking && player2.framesCurrent === (alienCharacter1Attack1.length - 1)) {
+  if (player2.isAttacking && player2.framesCurrent === (alien1LeftAttack1.length - 1)) {
     player2.isAttacking = false;
   }
 
@@ -201,7 +267,10 @@ function animate() {
   };
 }
 
-window.onload = animate();
+window.onload = function() {
+  decreaseTimer();
+  animate();
+}
 
 window.addEventListener('keydown', (event) => {
   switch (event.key) {

@@ -1,13 +1,11 @@
 class Drawing {
   constructor({
-    background = false,
     position,
     scale = 1,
     framesMax = 1,
     imageSrcArray,
     offset = { x: 0, y: 0 },
   }) {
-    this.background = background
     this.position = position
     this.width = 50
     this.height = 150
@@ -24,18 +22,18 @@ class Drawing {
 
   // 画像の描画
   draw() {
-    let drawingPosition = 0;
-    if (!this.background) drawingPosition = this.image.width * this.scale
+    let offsetX = this.offset.x;
+    if (this.direction) offsetX = this.image.width * this.scale / 2
     c.drawImage(
       this.image,
-      0,  // 元イメージ使用範囲の矩形のx座標（初期値は0）
-      0,  // 元イメージ使用範囲の矩形のy座標（初期値は0）
-      this.image.width,  // 元イメージ使用範囲の矩形の幅（初期値はイメージ本来の幅）
-      this.image.height,  // 元イメージ使用範囲の矩形の高さ（初期値はイメージ本来の高さ）
-      this.position.x - drawingPosition,  // 描画イメージ矩形のx座標
-      this.position.y - this.offset.y,  // 描画イメージ矩形のy座標
-      this.image.width * this.scale,  // イメージを描画する幅（初期値はイメージ本来の幅）
-      this.image.height * this.scale  // イメージを描画する高さ（初期値はイメージ本来の高さ）
+      0,
+      0,
+      this.image.width,
+      this.image.height,
+      this.position.x - offsetX,
+      this.position.y - this.offset.y,
+      this.image.width * this.scale,
+      this.image.height * this.scale
     )
   }
 
@@ -60,6 +58,7 @@ class Drawing {
 
 class Humanoid extends Drawing {
   constructor({
+    direction = '',
     position,
     velocity,
     imageSrcArray,
@@ -68,9 +67,28 @@ class Humanoid extends Drawing {
     offset = { x: 0, y: 0 },
     sprites,
     attackBox = {
-      offset: {},
-      width: 0,
-      height: 0,
+      right: {
+        position: {
+          x: 0,
+          y: 0
+        },
+        offset: {
+          x: 0, y: 0,
+        },
+        width: 0,
+        height: 0,
+      },
+      left: {
+        position: {
+          x: 0,
+          y: 0
+        },
+        offset: {
+          x: 0, y: 0,
+        },
+        width: 0,
+        height: 0,
+      },
     }
   }) {
     super({
@@ -80,19 +98,31 @@ class Humanoid extends Drawing {
       framesMax,
       offset,
     })
+    this.direction = direction
     this.velocity = velocity
     this.width = 50
     this.height = 150
     this.inputKey
     this.jumped
     this.attackBox = {
-      position: {
-        x: this.position.x,
-        y: this.position.y
+      right: {
+        position: {
+          x: this.position.x,
+          y: this.position.y
+        },
+        offset: attackBox['right'].offset,
+        width: attackBox['right'].width,
+        height: attackBox['right'].height,
       },
-      offset: attackBox.offset,
-      width: attackBox.width,
-      height: attackBox.height,
+      left: {
+        position: {
+          x: this.position.x,
+          y: this.position.y
+        },
+        offset: attackBox['left'].offset,
+        width: attackBox['left'].width,
+        height: attackBox['left'].height,
+      },
     }
     this.isAttacking
     this.health = 100
@@ -106,11 +136,6 @@ class Humanoid extends Drawing {
     this.draw()
     this.animateFrames()
 
-    this.attackBox.position.x = this.position.x + this.attackBox.offset.x
-    this.attackBox.position.y = this.position.y + this.attackBox.offset.y
-
-    c.fillRect(this.attackBox.position.x, this.attackBox.position.y, this.attackBox.width, this.attackBox.height)
-
     this.position.x += this.velocity.x
     this.position.y += this.velocity.y
 
@@ -122,17 +147,23 @@ class Humanoid extends Drawing {
   }
 
   switchDrawing(motion) {
-    this.sprites[motion].image = new Image()
-    this.framesMax = this.sprites[motion].framesMax
+    this.attackBox[this.direction].position.x = this.position.x + this.attackBox[this.direction].offset.x
+    this.attackBox[this.direction].position.y = this.position.y + this.attackBox[this.direction].offset.y
+
+    c.fillStyle = "rgba(" + [0, 0, 255, 0.5] + ")";
+    c.fillRect(this.attackBox[this.direction].position.x, this.attackBox[this.direction].position.y, this.attackBox[this.direction].width, this.attackBox[this.direction].height)
+
+    this.sprites[this.direction][motion].image = new Image()
+    this.framesMax = this.sprites[this.direction][motion].framesMax
     if (this.framesCurrent > this.framesMax -1) {
       this.framesCurrent = 0
     }
-    this.sprites[motion].image.src = this.sprites[motion].imageSrcArray[this.framesCurrent]
-    this.image = this.sprites[motion].image
-    if (motion === 'attack1') {
-      this.framesHold = 2
+    this.sprites[this.direction][motion].image.src = this.sprites[this.direction][motion].imageSrcArray[this.framesCurrent]
+    this.image = this.sprites[this.direction][motion].image
+    if (this.sprites[this.direction][motion].framesHold) {
+      this.framesHold = this.sprites[this.direction][motion].framesHold;
     } else {
-      this.framesHold = 10
+      this.framesHold = 10;
     }
   }
 }
