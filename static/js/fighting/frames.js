@@ -145,3 +145,31 @@ const backGroundCity1 = [
         './static/image/craftpix/characters/alien/PNG/alien_predator_mask/left/predatormask__0034_attack_4.png',
         './static/image/craftpix/characters/alien/PNG/alien_predator_mask/left/predatormask__0034_attack_4.png',
       ];
+
+window.onload = function() {
+  const preloadImages = [
+    backGroundCity1,
+    police1RightIdles,
+    police1RightRuns,
+    police1RightJumps,
+    police1RightAttack1,
+    police1LeftIdles,
+    police1LeftRuns,
+    police1LeftJumps,
+    police1LeftAttack1,
+    alien1RightIdles,
+    alien1RightRuns,
+    alien1RightJumps,
+    alien1RightAttack1,
+    alien1LeftIdles,
+    alien1LeftRuns,
+    alien1LeftJumps,
+    alien1LeftAttack1,
+  ];
+  preloadImages.forEach(function(srcArray, index) {
+    srcArray.forEach(function(src, index) {
+      const img = document.createElement('img');
+      img.src = src;
+    });
+  });
+};
