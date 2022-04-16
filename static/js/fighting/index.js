@@ -270,7 +270,7 @@ function animate() {
 window.onload = function() {
   decreaseTimer();
   animate();
-}
+};
 
 window.addEventListener('keydown', (event) => {
   switch (event.key) {
