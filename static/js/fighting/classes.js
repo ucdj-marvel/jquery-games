@@ -69,8 +69,7 @@ class Humanoid extends Drawing {
     attackBox = {
       right: {
         position: {
-          x: 0,
-          y: 0
+          x: 0, y: 0
         },
         offset: {
           x: 0, y: 0,
@@ -80,8 +79,7 @@ class Humanoid extends Drawing {
       },
       left: {
         position: {
-          x: 0,
-          y: 0
+          x: 0, y: 0
         },
         offset: {
           x: 0, y: 0,
@@ -89,7 +87,7 @@ class Humanoid extends Drawing {
         width: 0,
         height: 0,
       },
-    }
+    },
   }) {
     super({
       position,
@@ -125,11 +123,23 @@ class Humanoid extends Drawing {
       },
     }
     this.isAttacking
+    this.isTakeDamage
     this.health = 100
     this.framesCurrent = 0
     this.framesElapsed = 0
     this.framesHold = 10
     this.sprites = sprites
+    this.idleImg = new Image()
+    this.idleImg.onload = () => {
+      this.hitBox = {
+        offset: {
+          x: this.idleImg.width * this.scale / 2,
+        },
+        width: this.idleImg.width * this.scale,
+        height: this.idleImg.height * this.scale,
+      }
+    }
+    this.idleImg.src = this.sprites['right']['idle'].imageSrcArray[0]
   }
 
   update() {
@@ -153,10 +163,16 @@ class Humanoid extends Drawing {
     c.fillStyle = "rgba(" + [0, 0, 255, 0.5] + ")";
     c.fillRect(this.attackBox[this.direction].position.x, this.attackBox[this.direction].position.y, this.attackBox[this.direction].width, this.attackBox[this.direction].height)
 
+    c.fillStyle = "rgba(" + [100, 0, 0, 0.5] + ")";
+    c.fillRect(this.position.x - this.hitBox.offset.x, this.position.y, this.hitBox.width, this.hitBox.height)
+
     this.sprites[this.direction][motion].image = new Image()
     this.framesMax = this.sprites[this.direction][motion].framesMax
     if (this.framesCurrent > this.framesMax -1) {
-      this.framesCurrent = 0
+      this.framesCurrent = 0;
+    }
+    if (this.isTakeDamage && this.framesCurrent === (this.framesMax - 1)) {
+      this.isTakeDamage = false;
     }
     this.sprites[this.direction][motion].image.src = this.sprites[this.direction][motion].imageSrcArray[this.framesCurrent]
     this.image = this.sprites[this.direction][motion].image

@@ -51,7 +51,11 @@ const background = new Drawing({
               imageSrcArray: police1RightAttack1,
               framesMax: police1RightAttack1.length,
               framesHold: 2,
-            }
+            },
+            takeDamage: {
+              imageSrcArray: police1RightTakeDamage,
+              framesMax: police1RightTakeDamage.length,
+            },
           },
           left: {
             idle: {
@@ -70,7 +74,11 @@ const background = new Drawing({
               imageSrcArray: police1LeftAttack1,
               framesMax: police1LeftAttack1.length,
               framesHold: 2,
-            }
+            },
+            takeDamage: {
+              imageSrcArray: police1LeftTakeDamage,
+              framesMax: police1LeftTakeDamage.length,
+            },
           },
         },
         attackBox: {
@@ -90,7 +98,7 @@ const background = new Drawing({
             width: 110,
             height: 80,
           },
-        }
+        },
       }),
       player2 = new Humanoid({
         direction: 'left',
@@ -126,7 +134,11 @@ const background = new Drawing({
             attack1: {
               imageSrcArray: alien1RightAttack1,
               framesMax: alien1RightAttack1.length,
-            }
+            },
+            takeDamage: {
+              imageSrcArray: alien1RightTakeDamage,
+              framesMax: alien1RightTakeDamage.length,
+            },
           },
           left: {
             idle: {
@@ -144,7 +156,11 @@ const background = new Drawing({
             attack1: {
               imageSrcArray: alien1LeftAttack1,
               framesMax: alien1LeftAttack1.length,
-            }
+            },
+            takeDamage: {
+              imageSrcArray: alien1LeftTakeDamage,
+              framesMax: alien1LeftTakeDamage.length,
+            },
           }
         },
         attackBox: {
@@ -164,7 +180,7 @@ const background = new Drawing({
             width: 160,
             height: 40,
           },
-        }
+        },
       }),
       keys = {
         a: {
@@ -191,7 +207,9 @@ function animate() {
   player1.velocity.x = 0;
   player2.velocity.x = 0;
 
-  if (player1.isAttacking) {
+  if (player1.isTakeDamage) {
+    player1.switchDrawing('takeDamage');
+  } else if (player1.isAttacking) {
     player1.switchDrawing('attack1');
   } else if (player1.velocity.y < 0) {
     player1.switchDrawing('jump');
@@ -201,16 +219,18 @@ function animate() {
   if (keys.a.pressed && player1.inputKey === 'a') {
     player1.velocity.x = -5;
     player1.direction = 'left';
-    if (!player1.jumped && !player1.isAttacking) player1.switchDrawing('run');
+    if (!player1.jumped && !player1.isAttacking && !player1.isTakeDamag) player1.switchDrawing('run');
   } else if (keys.d.pressed && player1.inputKey === 'd') {
     player1.velocity.x = 5;
     player1.direction = 'right';
-    if (!player1.jumped && !player1.isAttacking) player1.switchDrawing('run');
-  } else if (!player1.jumped && !player1.isAttacking) {
+    if (!player1.jumped && !player1.isAttacking && !player1.isTakeDamag) player1.switchDrawing('run');
+  } else if (!player1.jumped && !player1.isAttacking && !player1.isTakeDamage) {
     player1.switchDrawing('idle');
   }
 
-  if (player2.isAttacking) {
+  if (player2.isTakeDamage) {
+    player2.switchDrawing('takeDamage');
+  } else if (player2.isAttacking) {
     player2.switchDrawing('attack1');
   } else if (player2.velocity.y < 0) {
     player2.switchDrawing('jump');
@@ -220,12 +240,12 @@ function animate() {
   if (keys.ArrowLeft.pressed && player2.inputKey === 'ArrowLeft') {
     player2.velocity.x = -5;
     player2.direction = 'left';
-    if (!player2.jumped && !player2.isAttacking) player2.switchDrawing('run');
+    if (!player2.jumped && !player2.isAttackingg && !player2.isTakeDamage) player2.switchDrawing('run');
   } else if (keys.ArrowRight.pressed && player2.inputKey === 'ArrowRight') {
     player2.velocity.x = 5;
     player2.direction = 'right';
-    if (!player2.jumped && !player2.isAttacking) player2.switchDrawing('run');
-  } else if (!player2.jumped && !player2.isAttacking) {
+    if (!player2.jumped && !player2.isAttackingg && !player2.isTakeDamage) player2.switchDrawing('run');
+  } else if (!player2.jumped && !player2.isAttacking && !player2.isTakeDamage) {
     player2.switchDrawing('idle');
   }
 
@@ -236,8 +256,9 @@ function animate() {
     }) &&
     player1.isAttacking && player1.framesCurrent === (police1RightAttack1.length - 1)
   ) {
+    player2.isTakeDamage = true;
+    player2.health -= 5;
     player1.isAttacking = false;
-    player2.health -= 2;
     document.querySelector('#player2Health').style.width = player2.health + '%';
   };
 
@@ -248,8 +269,8 @@ function animate() {
     }) &&
     player2.isAttacking && player2.framesCurrent === (alien1LeftAttack1.length - 1)
   ) {
-    player2.isAttacking = false;
-    player1.health -= 50;
+    player1.isTakeDamage = true;
+    player1.health -= 20;
     document.querySelector('#player1Health').style.width = player1.health + '%';
   };
 
