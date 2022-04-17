@@ -1,9 +1,10 @@
-const canvas = document.querySelector('canvas'),
+const canvasParent = document.getElementById('container'),
+      canvas = document.querySelector('canvas'),
       c = canvas.getContext('2d'),
       gravity = 0.7;
 
-canvas.width = 1024
-canvas.height = 576
+canvas.width = canvasParent.clientWidth;
+canvas.height = canvasParent.clientHeight;
 
 const rect = canvas.getBoundingClientRect();
 
@@ -215,8 +216,11 @@ const background = new Drawing({
 
 function animate() {
   game = window.requestAnimationFrame(animate);
+  c.fillStyle = 'black'
   c.fillRect(0, 0, canvas.width, canvas.height);
   background.update();
+  c.fillStyle = 'rgba(255, 255, 255, 0.15)'
+  c.fillRect(0, 0, canvas.width, canvas.height)
   player1.update();
   player2.update();
 
@@ -277,12 +281,14 @@ function animate() {
     player1.isAttacking && player1.framesCurrent === (police1RightAttack1.length - 1)
   ) {
     player2.health -= 5;
+    gsap.to('#player2Health', {
+      width: player2.health + '%'
+    });
     if (player2.health <= 0) {
       player2.dead = true;
     } else {
       player2.isTakeDamage = true;
     }
-    document.querySelector('#player2Health').style.width = player2.health + '%';
   };
 
   if (
@@ -293,12 +299,14 @@ function animate() {
     player2.isAttacking && player2.framesCurrent === (alien1LeftAttack1.length - 1)
   ) {
     player1.health -= 50;
+    gsap.to('#player1Health', {
+      width: player1.health + '%'
+    });
     if (player1.health <= 0) {
       player1.dead = true;
     } else {
       player1.isTakeDamage = true;
     }
-    document.querySelector('#player1Health').style.width = player1.health + '%';
   };
 
   if (player1.isAttacking && player1.framesCurrent === (police1RightAttack1.length - 1)) {
@@ -318,6 +326,13 @@ window.onload = function() {
   decreaseTimer();
   animate();
 };
+
+function canvasResize() {
+  canvas.width = canvasParent.clientWidth;
+  canvas.height = canvasParent.clientHeight;
+};
+
+window.addEventListener('resize', canvasResize);
 
 window.addEventListener('keydown', (event) => {
   if (!player1.dead) {

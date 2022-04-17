@@ -163,11 +163,11 @@ class Humanoid extends Drawing {
     this.attackBox[this.direction].position.x = this.position.x + this.attackBox[this.direction].offset.x
     this.attackBox[this.direction].position.y = this.position.y + this.attackBox[this.direction].offset.y
 
-    c.fillStyle = "rgba(" + [0, 0, 255, 0.5] + ")";
-    c.fillRect(this.attackBox[this.direction].position.x, this.attackBox[this.direction].position.y, this.attackBox[this.direction].width, this.attackBox[this.direction].height)
+    // c.fillStyle = "rgba(" + [0, 0, 255, 0.5] + ")";
+    // c.fillRect(this.attackBox[this.direction].position.x, this.attackBox[this.direction].position.y, this.attackBox[this.direction].width, this.attackBox[this.direction].height)
 
-    c.fillStyle = "rgba(" + [100, 0, 0, 0.5] + ")";
-    c.fillRect(this.position.x - this.hitBox.offset.x, this.position.y, this.hitBox.width, this.hitBox.height)
+    // c.fillStyle = "rgba(" + [100, 0, 0, 0.5] + ")";
+    // c.fillRect(this.position.x - this.hitBox.offset.x, this.position.y, this.hitBox.width, this.hitBox.height)
 
     this.sprites[this.direction][motion].image = new Image()
     this.framesMax = this.sprites[this.direction][motion].framesMax

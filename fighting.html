@@ -1,5 +1,10 @@
 <head>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&display=swap" rel="stylesheet">
+
   <link rel="stylesheet" type="text/css" href="static/css/fighting.css">
+  <!-- back grounds -->
   <link href="static/image/craftpix/backgrounds/PNG/City1/Bright/City1.png" as="image" rel="preload">
   <!-- plice1 right -->
   <link href="static/image/craftpix/characters/police/png/1/right/idle/1_police_Idle_000.png" as="image" rel="preload">
@@ -139,25 +144,28 @@
   <link href="static/image/craftpix/characters/alien/PNG/alien_predator_mask/left/predatormask__0024_dead_3.png" as="image" rel="preload">
   <link href="static/image/craftpix/characters/alien/PNG/alien_predator_mask/left/predatormask__0025_dead_4.png" as="image" rel="preload">
   <link href="static/image/craftpix/characters/alien/PNG/alien_predator_mask/left/predatormask__0026_dead_5.png" as="image" rel="preload">
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.10.3/gsap.min.js" integrity="sha512-6zTDRWNxo8vI6JZYDCwhrJpg5icK3P4HNnW3czsO5Scb3lAoPDam+/wF3eog4hxcl0h44d0XlIcFkuoSaWHQ2g==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 </head>
 <body>
-  <div id="redContainer">
-    <div id="smallRedContainer">
-      <div id="player1HealthContainer">
-        <div id="player1HealthBase"></div>
-        <div id="player1Health"></div>
+  <div id="gameDisplay">
+    <div id="container">
+      <div id="healthContainer">
+        <div id="player1HealthContainer">
+          <div id="player1HealthBase"></div>
+          <div id="player1Health"></div>
+        </div>
+        <div id="timer"></div>
+        <div id="player2HealthContainer">
+          <div id="player2HealthBase"></div>
+          <div id="player2Health"></div>
+        </div>
+        <div></div>
       </div>
-      <div id="timer"></div>
-      <div id="player2HealthContainer">
-        <div id="player2HealthBase"></div>
-        <div id="player2Health"></div>
-      </div>
-      <div></div>
+      <div id="displayText"></div>
+      <canvas></canvas>
     </div>
-    <div id="displayText"></div>
-    <canvas></canvas>
   </div>
-  <div id="contents" style="display: none;"></div>
   <script src="static/js/fighting/frames.js"></script>
   <script src="static/js/fighting/utils.js"></script>
   <script src="static/js/fighting/classes.js"></script>

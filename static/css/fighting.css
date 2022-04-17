@@ -1,51 +1,84 @@
 * {
   box-sizing: border-box;
+  font-family: 'Bebas Neue', cursive;
 }
 
-#redContainer {
+body {
+  background-color: black;
+  position: relative;
+}
+
+#gameDisplay {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translateY(-50%) translateX(-50%);
+}
+
+#container {
   position: relative;
   display: inline-block;
+  width: 95vw;
+  aspect-ratio: 16 / 9;
 }
 
-#smallRedContainer {
+#healthContainer {
   position: absolute;
+  top: 0;
   display: flex;
   width: 100%;
+  height: calc(95vw * 0.15);
   align-items: center;
   padding: 20px;
 }
 
 #timer {
   background-color: white;
+  font-size: 2em;
   width: 100px;
-  height: 100px;
+  height: 80%;
   flex-shrink: 0;
   display: flex;
   align-items: center;
   justify-content: center;
+  color: black;
+  border: 4px solid black;
 }
 
 #player1HealthContainer, #player2HealthContainer {
   position: relative;
-  height: 30px;
   width: 100%;
+  height: calc(95vw * 0.04);
   display: flex;
   justify-content: flex-end;
+  border-top: 4px solid black;
+  border-bottom: 4px solid black;
+}
+
+#player1HealthContainer {
+  border-left: 4px solid black;
+}
+
+#player2HealthContainer {
+  border-right: 4px solid black;
 }
 
 #player1HealthBase, #player2HealthBase {
   background-color: red;
-  height: 30px;
   width: 100%;
 }
 
 #player1Health, #player2Health {
+  background: lime;
   position: absolute;
-  background: yellow;
   top: 0;
   right: 0;
   bottom: 0;
   width: 100%;
+}
+
+#player2Health {
+  left: 0;
 }
 
 #displayText {
