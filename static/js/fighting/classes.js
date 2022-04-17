@@ -140,11 +140,14 @@ class Humanoid extends Drawing {
       }
     }
     this.idleImg.src = this.sprites['right']['idle'].imageSrcArray[0]
+    this.dead = false
   }
 
   update() {
     this.draw()
-    this.animateFrames()
+    if (!(this.dead && this.framesCurrent === (this.framesMax - 1))) {
+      this.animateFrames();
+    }
 
     this.position.x += this.velocity.x
     this.position.y += this.velocity.y

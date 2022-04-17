@@ -56,6 +56,10 @@ const background = new Drawing({
               imageSrcArray: police1RightTakeDamage,
               framesMax: police1RightTakeDamage.length,
             },
+            dead: {
+              imageSrcArray: police1RightDead,
+              framesMax: police1RightDead.length,
+            }
           },
           left: {
             idle: {
@@ -79,6 +83,10 @@ const background = new Drawing({
               imageSrcArray: police1LeftTakeDamage,
               framesMax: police1LeftTakeDamage.length,
             },
+            dead: {
+              imageSrcArray: police1LeftDead,
+              framesMax: police1LeftDead.length,
+            }
           },
         },
         attackBox: {
@@ -139,6 +147,10 @@ const background = new Drawing({
               imageSrcArray: alien1RightTakeDamage,
               framesMax: alien1RightTakeDamage.length,
             },
+            dead: {
+              imageSrcArray: alien1RightDead,
+              framesMax: alien1RightDead.length,
+            }
           },
           left: {
             idle: {
@@ -161,6 +173,10 @@ const background = new Drawing({
               imageSrcArray: alien1LeftTakeDamage,
               framesMax: alien1LeftTakeDamage.length,
             },
+            dead: {
+              imageSrcArray: alien1LeftDead,
+              framesMax: alien1LeftDead.length,
+            }
           }
         },
         attackBox: {
@@ -207,7 +223,9 @@ function animate() {
   player1.velocity.x = 0;
   player2.velocity.x = 0;
 
-  if (player1.isTakeDamage) {
+  if (player1.dead) {
+    player1.switchDrawing('dead');
+  } else if (player1.isTakeDamage) {
     player1.switchDrawing('takeDamage');
   } else if (player1.isAttacking) {
     player1.switchDrawing('attack1');
@@ -224,11 +242,13 @@ function animate() {
     player1.velocity.x = 5;
     player1.direction = 'right';
     if (!player1.jumped && !player1.isAttacking && !player1.isTakeDamag) player1.switchDrawing('run');
-  } else if (!player1.jumped && !player1.isAttacking && !player1.isTakeDamage) {
+  } else if (!player1.jumped && !player1.isAttacking && !player1.isTakeDamage && !player1.dead) {
     player1.switchDrawing('idle');
   }
 
-  if (player2.isTakeDamage) {
+  if (player2.dead) {
+    player2.switchDrawing('dead');
+  } else if (player2.isTakeDamage) {
     player2.switchDrawing('takeDamage');
   } else if (player2.isAttacking) {
     player2.switchDrawing('attack1');
@@ -245,7 +265,7 @@ function animate() {
     player2.velocity.x = 5;
     player2.direction = 'right';
     if (!player2.jumped && !player2.isAttackingg && !player2.isTakeDamage) player2.switchDrawing('run');
-  } else if (!player2.jumped && !player2.isAttacking && !player2.isTakeDamage) {
+  } else if (!player2.jumped && !player2.isAttacking && !player2.isTakeDamage && !player2.dead) {
     player2.switchDrawing('idle');
   }
 
@@ -256,9 +276,12 @@ function animate() {
     }) &&
     player1.isAttacking && player1.framesCurrent === (police1RightAttack1.length - 1)
   ) {
-    player2.isTakeDamage = true;
     player2.health -= 5;
-    player1.isAttacking = false;
+    if (player2.health <= 0) {
+      player2.dead = true;
+    } else {
+      player2.isTakeDamage = true;
+    }
     document.querySelector('#player2Health').style.width = player2.health + '%';
   };
 
@@ -269,8 +292,12 @@ function animate() {
     }) &&
     player2.isAttacking && player2.framesCurrent === (alien1LeftAttack1.length - 1)
   ) {
-    player1.isTakeDamage = true;
-    player1.health -= 20;
+    player1.health -= 50;
+    if (player1.health <= 0) {
+      player1.dead = true;
+    } else {
+      player1.isTakeDamage = true;
+    }
     document.querySelector('#player1Health').style.width = player1.health + '%';
   };
 
@@ -284,7 +311,6 @@ function animate() {
 
   if (player1.health <= 0 || player2.health <= 0) {
     gameset({ player1, player2, timerId });
-    cancelAnimationFrame(game);
   };
 }
 
@@ -294,37 +320,43 @@ window.onload = function() {
 };
 
 window.addEventListener('keydown', (event) => {
-  switch (event.key) {
-    case 'd':
-      keys.d.pressed = true;
-      player1.inputKey = 'd';
-      break
-    case 'a':
-      keys.a.pressed = true;
-      player1.inputKey = 'a';
-      break
-    case 'w':
-      player1.jumped = true;
-      player1.velocity.y = -15;
-      break
-    case ' ':
-      player1.isAttacking = true;
-      break
-    case 'ArrowRight':
-      keys.ArrowRight.pressed = true;
-      player2.inputKey = 'ArrowRight';
-      break
-    case 'ArrowLeft':
-      keys.ArrowLeft.pressed = true;
-      player2.inputKey = 'ArrowLeft';
-      break
-    case 'ArrowUp':
-      player2.jumped = true;
-      player2.velocity.y = -15;
-      break
-    case 'ArrowDown':
-      player2.isAttacking = true;
-      break
+  if (!player1.dead) {
+    switch (event.key) {
+      case 'd':
+        keys.d.pressed = true;
+        player1.inputKey = 'd';
+        break
+      case 'a':
+        keys.a.pressed = true;
+        player1.inputKey = 'a';
+        break
+      case 'w':
+        player1.jumped = true;
+        player1.velocity.y = -15;
+        break
+      case ' ':
+        player1.isAttacking = true;
+        break
+    }
+  }
+  if (!player2.dead) {
+    switch (event.key) {
+      case 'ArrowRight':
+        keys.ArrowRight.pressed = true;
+        player2.inputKey = 'ArrowRight';
+        break
+      case 'ArrowLeft':
+        keys.ArrowLeft.pressed = true;
+        player2.inputKey = 'ArrowLeft';
+        break
+      case 'ArrowUp':
+        player2.jumped = true;
+        player2.velocity.y = -15;
+        break
+      case 'ArrowDown':
+        player2.isAttacking = true;
+        break
+    }
   }
 })
 
