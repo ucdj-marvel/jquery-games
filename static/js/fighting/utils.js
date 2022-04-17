@@ -30,6 +30,11 @@ function decreaseTimer() {
     timerId = setTimeout(decreaseTimer, 1000)
     timer--
     document.querySelector('#timer').innerHTML = timer
+    if (timer <= 10) {
+      TweenLite.to("#timer", 0.5, {backgroundColor:"#FF0000", ease:Power2.easeOut, onComplete: function(){
+        TweenLite.to("#timer", 0.5, {backgroundColor:"#FFFFFF", ease:Power2.easeOut});
+      }});
+    }
   }
 
   if (timer === 0) {
