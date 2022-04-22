@@ -1,7 +1,6 @@
 const canvasParent = document.getElementById('container'),
       canvas = document.querySelector('canvas'),
-      c = canvas.getContext('2d'),
-      gravity = 0.7;
+      c = canvas.getContext('2d');
 
 canvas.width = canvasParent.clientWidth;
 canvas.height = canvasParent.clientHeight;
@@ -227,22 +226,23 @@ function animate() {
   player1.velocity.x = 0;
   player2.velocity.x = 0;
 
+  // console.log(canvas.left);
+  // console.log(canvas.right);
+
   if (player1.dead) {
     player1.switchDrawing('dead');
   } else if (player1.isTakeDamage) {
     player1.switchDrawing('takeDamage');
   } else if (player1.isAttacking) {
     player1.switchDrawing('attack1');
-  } else if (player1.velocity.y < 0) {
+  } else if (player1.isJumping) {
     player1.switchDrawing('jump');
-  } else {
-    player1.jumped = false;
   }
-  if (keys.a.pressed && player1.inputKey === 'a') {
+  if (keys.a.pressed && player1.inputKey === 'a' && player1.position.x >= 0) {
     player1.velocity.x = -5;
     player1.direction = 'left';
     if (!player1.jumped && !player1.isAttacking && !player1.isTakeDamag) player1.switchDrawing('run');
-  } else if (keys.d.pressed && player1.inputKey === 'd') {
+  } else if (keys.d.pressed && player1.inputKey === 'd' && player1.position.x <= canvas.width) {
     player1.velocity.x = 5;
     player1.direction = 'right';
     if (!player1.jumped && !player1.isAttacking && !player1.isTakeDamag) player1.switchDrawing('run');
@@ -256,16 +256,14 @@ function animate() {
     player2.switchDrawing('takeDamage');
   } else if (player2.isAttacking) {
     player2.switchDrawing('attack1');
-  } else if (player2.velocity.y < 0) {
+  } else if (player2.isJumped) {
     player2.switchDrawing('jump');
-  } else {
-    player2.jumped = false;
   }
-  if (keys.ArrowLeft.pressed && player2.inputKey === 'ArrowLeft') {
+  if (keys.ArrowLeft.pressed && player2.inputKey === 'ArrowLeft' && player2.position.x >= 0) {
     player2.velocity.x = -5;
     player2.direction = 'left';
     if (!player2.jumped && !player2.isAttackingg && !player2.isTakeDamage) player2.switchDrawing('run');
-  } else if (keys.ArrowRight.pressed && player2.inputKey === 'ArrowRight') {
+  } else if (keys.ArrowRight.pressed && player2.inputKey === 'ArrowRight' && player2.position.x <= canvas.width) {
     player2.velocity.x = 5;
     player2.direction = 'right';
     if (!player2.jumped && !player2.isAttackingg && !player2.isTakeDamage) player2.switchDrawing('run');
@@ -346,8 +344,10 @@ window.addEventListener('keydown', (event) => {
         player1.inputKey = 'a';
         break
       case 'w':
-        player1.jumped = true;
-        player1.velocity.y = -15;
+        if (player1.numOfJumps < 2) {
+          player1.numOfJumps += 1;
+          player1.velocity.y = -15;
+        }
         break
       case ' ':
         player1.isAttacking = true;
@@ -365,8 +365,10 @@ window.addEventListener('keydown', (event) => {
         player2.inputKey = 'ArrowLeft';
         break
       case 'ArrowUp':
-        player2.jumped = true;
-        player2.velocity.y = -15;
+        if (player2.numOfJumps < 2) {
+          player2.numOfJumps += 1;
+          player2.velocity.y = -15;
+        }
         break
       case 'ArrowDown':
         player2.isAttacking = true;

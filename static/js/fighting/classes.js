@@ -101,7 +101,6 @@ class Humanoid extends Drawing {
     this.width = 50
     this.height = 150
     this.inputKey
-    this.jumped
     this.attackBox = {
       right: {
         position: {
@@ -124,6 +123,8 @@ class Humanoid extends Drawing {
     }
     this.isAttacking
     this.isTakeDamage
+    this.isJumping
+    this.numOfJumps = 0
     this.health = 100
     this.framesCurrent = 0
     this.framesElapsed = 0
@@ -141,6 +142,7 @@ class Humanoid extends Drawing {
     }
     this.idleImg.src = this.sprites['right']['idle'].imageSrcArray[0]
     this.dead = false
+    this.gravity = 1
   }
 
   update() {
@@ -151,12 +153,6 @@ class Humanoid extends Drawing {
 
     this.position.x += this.velocity.x
     this.position.y += this.velocity.y
-
-    if (this.position.y + this.height + this.velocity.y >= canvas.height - 96) {
-      this.velocity.y = 0
-    } else {
-      this.velocity.y += gravity
-    }
   }
 
   switchDrawing(motion) {
@@ -176,6 +172,13 @@ class Humanoid extends Drawing {
     }
     if (this.isTakeDamage && this.framesCurrent === (this.framesMax - 1)) {
       this.isTakeDamage = false;
+    }
+    if (this.position.y + this.height + this.velocity.y >= canvas.height - 96) {
+      this.velocity.y = 0;
+      this.numOfJumps = 0;
+      this.isJumping = false;
+    } else {
+      this.velocity.y += this.gravity;
     }
     this.sprites[this.direction][motion].image.src = this.sprites[this.direction][motion].imageSrcArray[this.framesCurrent]
     this.image = this.sprites[this.direction][motion].image
